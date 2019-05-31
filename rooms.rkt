@@ -75,11 +75,3 @@ Alice provides an alibi for Barbara."
              [(solves-room? room answer) (string-append "You solved room: '" (room-name room) "'")]
              [else "Sorry, that's not the answer"])))
 
-
-  
-  
-
-
-
-
-
