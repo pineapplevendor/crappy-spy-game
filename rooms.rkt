@@ -1,8 +1,6 @@
 #lang racket
 
-(struct message (text) #:transparent)
-
-(struct room (name clue answer messages) #:transparent)
+(struct room (id name clue answer) #:transparent)
 
 (define (string->integers str)
   (map char->integer (string->list str)))
@@ -16,18 +14,19 @@
                          (string->integers str))))
 
 (define easy-1 (room
+                1
                 "Did you forget?"
                 (string-append "decode " (shift-string "password" 3))
-                "password"
-                '()))
+                "password"))
 
 (define easy-2 (room
+                2
                 "Wrong way"
                 (string-append "decode " (shift-string "reverse" -1))
-                "reverse"
-                '()))
+                "reverse"))
 
 (define easy-3 (room
+                3
                 "Who is the spy?"
                 "There are two engineers and one is a spy.
 The spy always lies and the other does not. Engineer Roy says,
@@ -35,12 +34,12 @@ The spy always lies and the other does not. Engineer Roy says,
 and engineer Bartholomew says,
 'Engineer Roy is a spy.'
 Are Roy, Bartholomew, or neither the spy?"
-                "Roy"
-                '()))
+                "Roy"))
 
 (define medium-1 (room
-                "Alibi confusion"
-                "The innocent will not lie or provide a false alibi.
+                  4
+                  "Alibi confusion"
+                  "The innocent will not lie or provide a false alibi.
 Find the smallest possible group of liars who provide an alibi to each other for the murder.
 Provide the killers' names, in alphabetic order, separated by spaces.
 Catherine provides an alibi for Elizabeth.
@@ -52,8 +51,7 @@ Danielle provides an alibi for Alice.
 Alice provides an alibi for Florence.
 Barbara provides an alibi for Danielle.
 Alice provides an alibi for Barbara."
-                "Catherine Elizabeth"
-                '()))
+                  "Catherine Elizabeth"))
 
 (define rooms (list easy-1 easy-2 easy-3 medium-1))
 
@@ -74,4 +72,8 @@ Alice provides an alibi for Barbara."
   (writeln (cond
              [(solves-room? room answer) (string-append "You solved room: '" (room-name room) "'")]
              [else "Sorry, that's not the answer"])))
+
+(define (solve-selected-room selected-room answer rooms)
+  (solve-room (select-room selected-room rooms) answer))
+
 
