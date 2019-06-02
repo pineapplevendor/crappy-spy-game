@@ -1,5 +1,7 @@
 #lang racket
 
+(provide get-rooms get-room-id-by-name)
+
 (struct room (id name clue answer) #:transparent)
 
 (define (string->integers str)
@@ -55,18 +57,24 @@ Alice provides an alibi for Barbara."
 
 (define rooms (list easy-1 easy-2 easy-3 medium-1))
 
+(define (get-rooms)
+  rooms)
+
 (define (list-rooms rooms)
   (map (lambda (room) (room-name room)) rooms))
 
 (define (select-room selected-name rooms)
-  (first (filter (lambda (room) (eq? (room-name room) selected-name)) rooms)))
+  (first (filter (lambda (room) (equal? (room-name room) selected-name)) rooms)))
+
+(define (get-room-id-by-name selected-name rooms)
+  (room-id (select-room selected-name rooms)))
 
 (define (display-room room)
   (writeln (string-append "room: " (room-name room)))
   (writeln (string-append "clue: " (room-clue room))))
   
 (define (solves-room? room answer)
-  (eq? (room-answer room) answer))
+  (equal? (room-answer room) answer))
 
 (define (solve-room room answer)
   (writeln (cond
