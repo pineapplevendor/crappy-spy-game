@@ -18,7 +18,7 @@
              (add-message (hash-ref rooms-to-messages selected-room-id '()) message)))
 
 (define (get-messages room-name)
-  (hash-ref rooms-to-messages (get-room-id-by-name room-name (get-rooms))))
+  (hash-ref rooms-to-messages (get-room-id-by-name room-name (get-rooms)) '()))
 
 (define (display-messages room-name)
   (for-each
