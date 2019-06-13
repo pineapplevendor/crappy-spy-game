@@ -1,6 +1,6 @@
 #lang racket
 
-(provide get-rooms get-room-id-by-name)
+(provide get-rooms get-room-id-by-name list-rooms solve-selected-room display-selected-room)
 
 (struct room (id name clue answer) #:transparent)
 
@@ -17,19 +17,19 @@
 
 (define easy-1 (room
                 1
-                "Did you forget?"
+                "did-you-forget"
                 (string-append "decode " (shift-string "password" 3))
                 "password"))
 
 (define easy-2 (room
                 2
-                "Wrong way"
+                "wrong-way"
                 (string-append "decode " (shift-string "reverse" -1))
                 "reverse"))
 
 (define easy-3 (room
                 3
-                "Who is the spy?"
+                "who-is-the-spy"
                 "There are two engineers and one is a spy.
 The spy always lies and the other does not. Engineer Roy says,
 'We can both be trusted'
@@ -40,10 +40,10 @@ Are Roy, Bartholomew, or neither the spy?"
 
 (define medium-1 (room
                   4
-                  "Alibi confusion"
+                  "alibi-confusion"
                   "The innocent will not lie or provide a false alibi.
 Find the smallest possible group of liars who provide an alibi to each other for the murder.
-Provide the killers' names, in alphabetic order, separated by spaces.
+Provide the killers' names, in alphabetic order, separated by commas and no spaces.
 Catherine provides an alibi for Elizabeth.
 Catherine provides an alibi for Alice.
 Elizabeth provides an alibi for Florence.
@@ -53,7 +53,7 @@ Danielle provides an alibi for Alice.
 Alice provides an alibi for Florence.
 Barbara provides an alibi for Danielle.
 Alice provides an alibi for Barbara."
-                  "Catherine Elizabeth"))
+                  "Catherine,Elizabeth"))
 
 (define rooms (list easy-1 easy-2 easy-3 medium-1))
 
@@ -61,7 +61,8 @@ Alice provides an alibi for Barbara."
   rooms)
 
 (define (list-rooms rooms)
-  (map (lambda (room) (room-name room)) rooms))
+  (for-each (lambda (room) (writeln (string-append "room: " (room-name room))))
+            rooms))
 
 (define (select-room selected-name rooms)
   (first (filter (lambda (room) (equal? (room-name room) selected-name)) rooms)))
@@ -72,6 +73,9 @@ Alice provides an alibi for Barbara."
 (define (display-room room)
   (writeln (string-append "room: " (room-name room)))
   (writeln (string-append "clue: " (room-clue room))))
+
+(define (display-selected-room selected-room)
+  (display-room (select-room selected-room (get-rooms))))
   
 (define (solves-room? room answer)
   (equal? (room-answer room) answer))
@@ -81,7 +85,7 @@ Alice provides an alibi for Barbara."
              [(solves-room? room answer) (string-append "You solved room: '" (room-name room) "'")]
              [else "Sorry, that's not the answer"])))
 
-(define (solve-selected-room selected-room answer rooms)
-  (solve-room (select-room selected-room rooms) answer))
+(define (solve-selected-room selected-room answer)
+  (solve-room (select-room selected-room (get-rooms)) answer))
 
 

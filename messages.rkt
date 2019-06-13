@@ -2,6 +2,8 @@
 
 (require "rooms.rkt")
 
+(provide display-messages update-messages)
+
 (define rooms-to-messages (make-hash))
 
 (define max-messages 10)
@@ -29,5 +31,6 @@
 (define (count-down n)
   (cond [(equal? 0 n) '()]
         [else (cons n (count-down (- n 1)))]))
+
 
 
